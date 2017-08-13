@@ -1,0 +1,295 @@
+// **************Init_Enemy*********************
+// Initialize Enemy sprite 
+// Input: none
+// Output: none
+void Init_Enemy(void)
+{ int i;
+  for(i=0;i<4;i++){
+    Enemy[i].x = 20*i;
+    Enemy[i].y = 10;
+    Enemy[i].image[0] = SmallEnemy30PointA;
+    Enemy[i].image[1] = SmallEnemy30PointB;
+    Enemy[i].life = 1;
+   }
+}
+
+// **************Init_Player*********************
+// Initialize Player sprite 
+// Input: none
+// Output: none
+void Init_Player(void)
+{
+	Player.x = 32;
+	Player.y = 47;
+	Player.image = PlayerShip0;
+	Player.life = 1;
+}
+
+// **************Init_Missile0*********************
+// Initialize Missile0 sprite 
+// Input: none
+// Output: none
+void Init_Missile0(void)
+{
+	Missile_Zero.x = Player.x;
+	Missile_Zero.y = (Player.y) + 1;
+	Missile_Zero.image = Missile0;
+	Missile_Zero.life = 1;
+}
+
+// **************Init_Missile2*********************
+// Initialize Missile2 sprite 
+// Input: none
+// Output: none
+void Init_Missile2(void)
+{
+	Missile_two.x = Enemy.x;
+	Missile_two.y = Enemy.y;
+	Missile_two.image = Missile2;
+	Missile_two.life = 1;
+}
+
+// **************Init_Laser0*********************
+// Initialize Laser0 sprite 
+// Input: none
+// Output: none
+void Init_Laser0(void)
+{
+	Laser_Zero.x = Player.x;
+	Laser_Zero.y = (Player.y) + 1;
+	Laser_Zero.image = Laser0;
+	Laser0.life = 1;
+}
+
+
+
+
+
+
+
+
+
+
+// **************Init_Laser1*********************
+// Initialize Laser1 sprite 
+// Input: none
+// Output: none
+void Init_Laser1(void)
+{
+	Laser_one.x = Enemy.x;
+	Laser_one.y = Enemy.y;
+	Laser_one.image = Laser1;
+	Laser_one.life = 1;
+}
+
+// **************Move_Player*********************
+// Move player sprite to new position 
+// Input: new position
+// Output: none
+void Move_Player(unsigned long New_Position)
+{
+	Player.x = New_Position;
+}
+
+// **************Move_Missile_Laser*********************
+// Move missile/laser sprite. when missile hits something, 
+// initialises blank missile to cover missile 
+// Input: missile/laser, enemy
+// Output: none
+void Move_Missile_Laser(STyp Enemy, STyp Missile_Laser)
+{
+	while((Missile_Laser.x != Enemy.x) && (Missile_Laser.y != Enemy.y))
+	{
+		if(Missile_Laser.y < 42)
+			Missile_Laser.y += 1 // move upwards
+		else
+			Missile_Laser.life = 1;
+	}
+	Init_Missile2(); // blank space to cover a missile after it hits something
+}
+
+		if(Missile_Laser.y < 42)
+			Missile_Laser.y += 1 // move upwards
+		else
+			Missile_Laser.life = 0;
+		for(iii = 0; iii < ENEMY_SIZE && Missile_Laser.life != 0; iii++)
+		{	
+			if((Missile_Laser.x == Enemy[iii].x) && (Missile_Laser.y == Enemy[iii].y))
+				Init_Missile2(); // blank space to cover a missile after it hits something
+		}
+// **************Move*********************
+// Move enemy sprites right
+// Input: none
+// Output: none
+void Move_Enemy(void){ int i;
+  for(i=0;i<4;i++){
+    if(Enemy[i].x < 72){
+      Enemy[i].x += 2; // move to right
+    }else{
+      Enemy[i].life = 0;
+    }
+  }
+}
+
+void Init_Missile0(void)
+{ int i;
+  for(i=0;i<MISSILE_COUNT;i++){
+    Missile_Zero[i].x = Player.x;;
+    Missile_Zero[i].y = (Player.y) + 1;
+	Missile_Zero[i].image = Missile0;
+    Missile_Zero[i].life = 0;
+   }
+}
+void Move_Missile(STyp Missile_Laser[])
+{
+	int jjj;
+	for(jjj = 0; jjj < MISSILE_COUNT; jjj++)
+	{
+		if(Missile_Laser[jjj].life)
+			Move_Missile_Laser(&Missile_Laser[jjj]); // move missile
+	}
+}
+
+void Init_Missile0(unsigned long NextMissile)
+{ 
+    Missile_Zero[NextMissile].x = Player.x;;
+    Missile_Zero[NextMissile].y = (Player.y) + 1;
+	Missile_Zero[NextMissile].image = Missile0;
+    Missile_Zero[NextMissile].life = 1;
+}
+
+
+void Move_Missile_Laser2(STyp *Missile_Laser)
+{
+	int iii;
+	if(Missile_Laser->y > 10 || Missile_Laser->x > 0)
+	{	
+		Missile_Laser->y -= 1;// move upwards
+		Missile_Laser->x -= 1;// move leftwards
+	}
+	else
+	{
+		Missile_Laser->life = 0;
+		//Missile_Laser->y = (Player.y) + 1;
+	}
+	for(iii = 0; (iii < ENEMY_SIZE) && (Missile_Laser->life != 0); iii++)
+	{	
+		if((Missile_Laser->x == Enemy[iii].x) && (Missile_Laser->y == Enemy[iii].y))
+		{	
+			Init_Missile2(*Missile_Laser); // blank space to cover a missile after it hits something*/
+		}	
+	}
+}
+
+
+        if(GPIO_PORTE_DATA_R & 0x1) // switch 1 pressed?
+		{
+			Init_Missile0(); // initialise NextMissile
+			Sound_Play(SineWave,sizeof(SineWave)/sizeof(unsigned long)); //play missile/laser sound
+		}
+		if(GPIO_PORTE_DATA_R & 0x2) // switch 1 pressed?
+		{
+			Init_Missile1(); // initialise NextMissile
+			Sound_Play(SineWave,sizeof(SineWave)/sizeof(unsigned long)); //play missile/laser sound
+		}
+		
+		void Init_Missile0();
+		void Init_Missile1();
+		void Move_Missile_Laser();
+		void Move_Missile_Laser2();
+		
+void Init_Missile0(void)                                                    
+{ 
+    Missile_Zero.x = (Player.x) + 8;
+    Missile_Zero.y = (Player.y) - 8;
+	  Missile_Zero.image = Missile0;
+    Missile_Zero.life = 1;
+}
+
+void Init_Missile1(void)
+{ 	
+		Missile_One[0].x = (Player.x) + 8;
+    Missile_One[0].y = (Player.y) - 8;
+		Missile_One[0].image = Missile1;
+    Missile_One[0].life = 1;
+		Missile_One[1].x = (Player.x) + 1;
+    Missile_One[1].y = (Player.y) - 1;
+		Missile_One[1].image = Missile1;
+    Missile_One[1].life = 1;
+}
+		
+void Move_Missile_Laser(void)
+{
+	int iii;
+	if(Missile_Zero.y > 9)
+	{	
+		Missile_Zero.y -= 6;// move upwards
+	}
+	else
+	{
+		Missile_Zero.life = 0;
+		//Missile_Laser->y = (Player.y) + 1;
+	}
+	for(iii = 0; (iii < ENEMY_SIZE) && (Missile_Laser.life != 0); iii++)
+	{	
+		if((Missile_Zero.x == Enemy[iii].x) && ((Missile_Zero.y) == Enemy[iii].y))
+		{	
+			Init_Missile2(Missile_Zero); // blank space to cover a missile after it hits something*/
+			Init_SmallExposion0(Missile_Zero); // small explosion following demise of enemy
+			Enemy[iii].life = 0;
+		}	
+	}
+}
+
+void Move_Missile(STyp Missile_Laser[])
+{
+	int jjj;
+	for(jjj = 0; jjj < MISSILE_COUNT; jjj++)
+	{
+		if(Missile_Laser[jjj].life)
+		{	
+			if( Missile_Laser[jjj].image == Missile1)
+				Move_Missile_Laser2(&Missile_Laser[jjj]); // move special missile
+			else
+				Move_Missile_Laser(&Missile_Laser[jjj]); // move ordinary missile
+		}
+	}
+}
+
+void Move_Missile_Laser2(void)
+{
+	unsigned long iii = 0, jjj = 0;
+	if((Missile_One[iii].y) > 9 ) // upwards special missile
+	{	
+		Missile_One[iii].y -= 1;// move upwards
+	}
+	else
+	{
+		Missile_One[iii].life = 0;
+		//Missile_Laser->y = (Player.y) + 1;
+	}
+	// upwards, leftwards special missile
+	if((Missile_One[iii + 1].x) > 0) && Missile_One[iii + 1].y > 9) 
+	{	
+		// move upwards, leftwards
+		Missile_One[iii + 1].y -= 1;	
+		Missile_One[iii + 1].x -= 1;
+	}
+	else
+	{
+		Missile_One[iii + 1].life = 0;
+		//Missile_Laser->y = (Player.y) + 1;
+	}
+	for(iii = 0; iii < ENEMY_SIZE ; iii++)
+	{
+		for(jjj = 0; jjj < MISSILE_COUNT && Missile_One[jjj].life != 0; jjj++)
+		{
+			if((Missile_One[jjj].x == Enemy[iii].x) && ((Missile_One[jjj].y) == Enemy[iii].y))
+			{	
+				Init_Missile2(Missile_One[jjj]); // blank space to cover a missile after it hits something*/
+				Init_SmallExposion0(Missile_One[jjj]); // small explosion following demise of enemy
+				Enemy[iii].life = 0; 
+			}
+		}
+	}
+}

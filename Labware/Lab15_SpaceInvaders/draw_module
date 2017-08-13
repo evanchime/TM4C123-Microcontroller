@@ -1,0 +1,121 @@
+// **************Draw_Player*********************
+// Display Player sprite  
+// Input: none
+// Output: none
+void Draw_Player(void)
+{
+	Nokia5110_ClearBuffer();
+	Nokia5110_PrintBMP(Player.x, Player.y, PlayerShip0, 0); // PlayerShip0
+	Nokia5110_DisplayBuffer();      // draw buffer
+}
+
+// **************Draw_Missile0*********************
+// Display Missile0 sprite  
+// Input: none
+// Output: none
+void Draw_Missile0(void)
+{
+	Nokia5110_ClearBuffer();
+	if(Missile_Zero.life > 0)
+	{
+		Nokia5110_PrintBMP(Missile_Zero.x, Missile_Zero.y, Missile0, 0); // missile1
+		Nokia5110_DisplayBuffer();      // draw buffer
+	}
+	else
+		Init_Missile0();
+}
+
+// **************Draw_Missile2*********************
+// Display Missile2 sprite  
+// Input: none
+// Output: none
+void Draw_Missile2(void)
+{
+	Nokia5110_ClearBuffer();
+	if(Missile_two.life > 0)
+	{
+		Nokia5110_PrintBMP(Missile_two.x, Missile_two.y, Missile2, 0); // missile2
+		Nokia5110_DisplayBuffer();      // draw buffer
+	}
+	/*else
+		Init_Missile2();*/
+}
+
+// **************Draw_Laser0*********************
+// Display Laser0 sprite  
+// Input: none
+// Output: none
+void Draw_Laser0(void)
+{
+	Nokia5110_ClearBuffer();
+	if(Laser_Zero.life > 0)
+	{
+		Nokia5110_PrintBMP(Laser0.x, Laser0.y, Laser0, 0); // laser0
+		Nokia5110_DisplayBuffer();      // draw buffer
+	}
+	else
+		Init_Laser0();
+}
+
+// **************Draw_Laser1*********************
+// Display Laser1 sprite  
+// Input: none
+// Output: none
+
+void Draw_Laser1(void)
+{
+	Nokia5110_ClearBuffer();
+	if(Laser_one.life > 0)
+	{
+		Nokia5110_PrintBMP(Laser1.x, Laser1.y, Laser1, 0); // laser1
+		Nokia5110_DisplayBuffer();      // draw buffer
+	}
+	/*else
+		Init_Laser0();*/
+}
+
+// **************Draw_Enemy*********************
+// Display Enemy sprite  
+// Input: none
+// Output: none
+void Draw_Enemy(void)
+{ 
+  int i, j;
+  Nokia5110_ClearBuffer();
+  for(i=j=0;i<ENEMY_SIZE;i++){
+    if(Enemy[i].life > 0){
+		Nokia5110_PrintBMP(Enemy[i].x, Enemy[i].y, Enemy[i].image[FrameCount], 0);
+    }
+	else
+		++j;
+  }
+  if(j>=ENEMY_SIZE) // if all enemy.life == 0
+	Init_Enemy();
+  Nokia5110_DisplayBuffer();      // draw buffer
+  FrameCount = (FrameCount+1)&0x01; // 0,1,0,1,...
+}
+
+
+void Draw_Enemy(void)
+{ 
+  int i;
+  //Nokia5110_ClearBuffer();
+  for(i=0;i < MISSILE_COUNT;i++){
+    if(Missile_Zero[i].life > 0){
+		Nokia5110_PrintBMP(Missile_Zero[i].x, Missile_Zero[i].y, Missile_Zero[i].image, 0);
+    }
+}
+
+
+
+void Draw_Missile0(void)
+{
+	//Nokia5110_ClearBuffer();
+	if(Missile_Zero.life > 0)
+	{
+		Nokia5110_PrintBMP(Missile_Zero.x, Missile_Zero.y, Missile0, 0); // missile1
+		//Nokia5110_DisplayBuffer();      // draw buffer
+	}
+	else
+		Init_Missile0();
+}

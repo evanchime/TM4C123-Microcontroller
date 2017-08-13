@@ -1,0 +1,52 @@
+// Interrupt service routine
+// runs at 30 Hz
+void SysTick_Handler(void)
+{	
+	ADCdata = ADC0_In(); // Sample the ADC, calling ADC0_In() and storing in global variable ADCdata
+	if(ADCdata)
+	{
+		ADCdata -= Prev;
+		Prev += ADCdata;
+		Move_Player((72*Prev)>>12);
+	}
+	if(GPIO_PORTE_DATA_R & 0x3)
+	{
+		if(GPIO_PORTE_DATA_R & 0x1)
+			Move_Missile_Laser(Enemy[], Missile_Zero);
+		else if(GPIO_PORTE_DATA_R & 0x2)
+			Move_Missile_Laser(Enemy[], Laser_Zero);
+		Sound_Play(SineWave,sizeof(SineWave)/sizeof(unsigned long));
+	}
+	Move_Enemy();
+	Sound_Play(SineWave_Enemy,sizeof(SineWave_Enemy)/sizeof(unsigned long));
+	Semaphore = 1;
+}
+
+Draw_Player(); // display playership
+Draw_Enemy(); // display enemy sprite
+
+while(1)
+{
+	while(Semaphore==0); // wait for semaphore != 0
+	Draw_Player(); // display playership
+	Draw_Enemy(); // display enemy sprite
+	Draw_Laser1(); // display laser1 sprite
+	Draw_Laser0(); // display laser0 sprite
+	Draw_Missile2(); // display Missile2 sprite
+	Draw_Missile0(); // display Missile0 sprite
+	Semaphore = 0;
+	Delay100ms(1);
+}
+
+
+// Initialize SysTick interrupts to trigger at 30 Hz
+void SysTick_Init(unsigned long period)
+{
+  NVIC_ST_CTRL_R = 0;           // disable SysTick during setup
+  NVIC_ST_RELOAD_R = period - 1;     // reload value (assuming 80MHz)
+  NVIC_ST_CURRENT_R = 0;        // any write to current clears it
+  NVIC_SYS_PRI3_R = NVIC_SYS_PRI3_R&0x00FFFFFF; // priority 0 
+  NVIC_ST_CTRL_R = 0x00000007;  // enable with core clock and interrupts
+}
+
+	
